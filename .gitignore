@@ -1,0 +1,20 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build outputs
+bin/
+obj/
+
+# Visual Studio cache
+*.cache
+*.dbmdl
+*.pdb
+
+# Rider
+.idea/
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
