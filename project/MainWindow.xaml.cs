@@ -14,25 +14,17 @@ using separate_animate;
 
 namespace project
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly DispatcherTimer _timer;
         public MainWindow()
         {
             InitializeComponent();
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += Timer_Tick;
-
-            Timer_Tick(null, null);
-            _timer.Start();
+            Loaded += MainWindow_Loaded;
         }
-        private void Timer_Tick(object? sender, EventArgs e)
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ClockText.Text = DateTime.Now.ToString("HH:mm:ss");
+            MainFrame_t.Content = new MainPage();
         }
     }
 }
