@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:project"
         mc:Ignorable="d">
     <Grid Background="Black">
+        <MediaElement x:Name="BackgroundVideo"
+                      Source="background/backgroundvideo.mp4"
+                      LoadedBehavior="Play"
+                      UnloadedBehavior="Stop"
+                      IsMuted="True"/>
         <TextBlock x:Name="ClockText"
                    Text="00:00:00"
                    FontSize="60"
