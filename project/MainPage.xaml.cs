@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace project
             _timer.Tick += Timer_Tick;
 
             UpdateClock();
+            Change_label();
             _timer.Start();
         }
         //shows the current time
@@ -37,6 +39,26 @@ namespace project
         private void Timer_Tick(object? sender, EventArgs e)
         {
             UpdateClock();
+        }
+
+        private void Change_label()
+        {
+            if(DateTime.Now > DateTime.Today.AddHours(12))
+            {
+                Label.Text = "what's up dude";
+            }
+            else
+            {
+                Label.Text = "*yawn*...";
+            }
+            if(DateTime.Now > DateTime.Today.AddHours(18))
+            {
+                Label.Text = "time to get a lil sleep, don't you think?";
+                if (DateTime.Now > DateTime.Today.AddHours(23))
+                {
+                    Label.Text = "dude... GO TO SLEEP!";
+                }
+            }
         }
 
         private void openAlarms_clhandler(object sender, RoutedEventArgs e)
