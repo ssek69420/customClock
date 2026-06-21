@@ -21,5 +21,39 @@ namespace project
         {
             InitializeComponent();
         }
+        private bool _isUpdating = false;
+
+        private void TimeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdating)
+                return;
+
+            _isUpdating = true;
+
+            TextBox textBox = (TextBox)sender;
+
+            // Keep only digits
+            string digits = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+            // Maximum HHMMSS
+            if (digits.Length > 6)
+                digits = digits.Substring(0, 6);
+
+            // Pad with leading zeros
+            digits = digits.PadLeft(6, '0');
+
+            // Format as HH:MM:SS
+            string formatted =
+                $"{digits.Substring(0, 2)}:" +
+                $"{digits.Substring(2, 2)}:" +
+                $"{digits.Substring(4, 2)}";
+
+            textBox.Text = formatted;
+
+            // Put cursor at the end
+            textBox.CaretIndex = textBox.Text.Length;
+
+            _isUpdating = false;
+        }
     }
 }

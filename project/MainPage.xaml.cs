@@ -43,9 +43,12 @@ namespace project
 
         private void Change_label()
         {
+            Random random = new Random();
             if(DateTime.Now > DateTime.Today.AddHours(12))
             {
-                Label.Text = "what's up dude";
+                string[] phrasesTwelve = {"what's up dude", "hey there!", "good to see you!", "what are you doing?"};
+                int rand_i = random.Next(phrasesTwelve.Length);
+                Label.Text = phrasesTwelve[rand_i];
             }
             else
             {
@@ -53,10 +56,14 @@ namespace project
             }
             if(DateTime.Now > DateTime.Today.AddHours(18))
             {
-                Label.Text = "time to get a lil sleep, don't you think?";
+                string[] phrasesEighteen = { "time to get a lil sleep, don't you think?", "it's getting late, maybe you should rest?", "you look tired, maybe you should sleep?" };
+                int rand_i = random.Next(phrasesEighteen.Length);
+                Label.Text = phrasesEighteen[rand_i];
                 if (DateTime.Now > DateTime.Today.AddHours(23))
                 {
-                    Label.Text = "dude... GO TO SLEEP!";
+                    string[] phrasesTwentyThree = { "dude... GO TO SLEEP!", "it's really late, you should sleep!", "you look like a zombie, go to sleep!" };
+                    int rand_i_t = random.Next(phrasesTwentyThree.Length);
+                    Label.Text = phrasesTwentyThree[rand_i_t];
                 }
             }
         }

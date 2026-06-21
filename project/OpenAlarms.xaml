@@ -5,13 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:project"
         mc:Ignorable="d">
-    <Grid Background="AntiqueWhite">
-        <TextBlock
-                   Text="wip"
-                   FontSize="60"
-                   FontWeight="Bold" 
-                   Foreground="Black" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="BlueViolet" Offset="0"/>
+                <GradientStop Color="AliceBlue" Offset="0.55"/>
+                <GradientStop Color="DarkBlue" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Width="420"
+        Padding="28"
+        CornerRadius="28"
+        Background="#22000000"
+        BorderBrush="Pink"
+        BorderThickness="1"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <TextBox x:Name="TimeTextBox"
+             Width="200"
+             Background="Transparent"
+             Height="40"
+             FontSize="20"
+             HorizontalContentAlignment="Center"
+             VerticalContentAlignment="Center"
+             TextChanged="TimeTextBox_TextChanged"/>
+        </Border>
     </Grid>
 </Page>
