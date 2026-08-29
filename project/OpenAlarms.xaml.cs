@@ -55,5 +55,25 @@ namespace project
 
             _isUpdating = false;
         }
+
+        private void AddAlarmButton_Click(object sender, RoutedEventArgs e)
+        {
+            string alarmTime = TimeTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(alarmTime))
+                return;
+
+            TextBlock alarm = new TextBlock
+            {
+                Text = alarmTime,
+                FontSize = 20,
+                Foreground = Brushes.White,
+                Margin = new Thickness(0, 0, 0, 10)
+            };
+
+            ActiveAlarmsPanel.Children.Add(alarm);
+
+            AlarmCountText.Text = ActiveAlarmsPanel.Children.Count.ToString();
+        }
     }
 }
