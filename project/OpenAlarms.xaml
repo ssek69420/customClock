@@ -52,19 +52,156 @@
                                Margin="0,0,0,20"/>
 
 
-                    <!-- Time Input -->
-                    <TextBox x:Name="TimeTextBox"
-                             Width="200"
-                             Height="50"
-                             Background="#22000000"
-                             BorderBrush="#66FFFFFF"
-                             BorderThickness="1"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontSize="22"
-                             HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             TextChanged="TimeTextBox_TextChanged"/>
+                    <!-- Time Picker -->
+                    <Border Width="350"
+        Height="140"
+        Background="#22000000"
+        BorderBrush="#66FFFFFF"
+        BorderThickness="1"
+        CornerRadius="8"
+        Padding="10">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- HOURS -->
+                            <StackPanel Grid.Column="0">
+
+                                <Button Content="▲"
+                    Height="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    Click="HourUp_Click"/>
+
+                                <Border Height="55"
+                    Background="#33111111"
+                    BorderBrush="#66FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="4">
+
+                                    <TextBlock x:Name="HourText"
+                           Text="06"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Content="▼"
+                    Height="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    Click="HourDown_Click"/>
+
+                            </StackPanel>
+
+
+                            <!-- FIRST COLON -->
+                            <TextBlock Grid.Column="1"
+                   Text=":"
+                   FontSize="28"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+
+                            <!-- MINUTES -->
+                            <StackPanel Grid.Column="2">
+
+                                <Button Content="▲"
+                    Height="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    Click="MinuteUp_Click"/>
+
+                                <Border Height="55"
+                    Background="#33111111"
+                    BorderBrush="#66FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="4">
+
+                                    <TextBlock x:Name="MinuteText"
+                           Text="55"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Content="▼"
+                    Height="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    Click="MinuteDown_Click"/>
+
+                            </StackPanel>
+
+
+                            <!-- SECOND COLON -->
+                            <TextBlock Grid.Column="3"
+                   Text=":"
+                   FontSize="28"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+
+
+                            <!-- SECONDS -->
+                            <StackPanel Grid.Column="4">
+
+                                <Button Content="▲"
+                   Height="30"
+                   Background="Transparent"
+                   BorderThickness="0"
+                   Foreground="#CCCCCC"
+                   FontSize="16"
+                   Click="SecondUp_Click"/>
+
+                                <Border Height="55"
+                    Background="#33111111"
+                    BorderBrush="#66FFFFFF"
+                    BorderThickness="1"
+                    CornerRadius="4">
+
+                                    <TextBlock x:Name="SecondText"
+                           Text="00"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Content="▼"
+                    Height="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    Click="SecondDown_Click"/>
+
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
 
 
                     <!-- Add Alarm Button -->
@@ -167,18 +304,24 @@
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Disabled">
 
-                        <StackPanel x:Name="ActiveAlarmsPanel">
+                        <Grid Grid.Row="2">
 
-                            <!-- Empty state -->
                             <TextBlock x:Name="NoAlarmsText"
-                                       Text="No active alarms"
-                                       FontSize="16"
-                                       Foreground="#AAFFFFFF"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Margin="0,35,0,35"/>
+               Text="No active alarms"
+               FontSize="16"
+               Foreground="#AAFFFFFF"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
 
-                        </StackPanel>
+                            <!-- Actual alarm list -->
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+                                <StackPanel x:Name="ActiveAlarmsPanel"/>
+
+                            </ScrollViewer>
+
+                        </Grid>
 
                     </ScrollViewer>
 

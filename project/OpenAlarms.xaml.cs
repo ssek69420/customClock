@@ -1,79 +1,143 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace project
 {
-    /// <summary>
-    /// Interaction logic for OpenAlarms.xaml
-    /// </summary>
     public partial class OpenAlarms : Page
     {
         public OpenAlarms()
         {
             InitializeComponent();
+
+            _hours = 0;
+            _minutes = 00;
+            _seconds = 0;
+
+            UpdateTimeDisplay();
         }
-        private bool _isUpdating = false;
 
-        private void TimeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private int _hours;
+        private int _minutes;
+        private int _seconds;
+
+        private void UpdateTimeDisplay()
         {
-            if (_isUpdating)
-                return;
+            HourText.Text = _hours.ToString("D2");
+            MinuteText.Text = _minutes.ToString("D2");
+            SecondText.Text = _seconds.ToString("D2");
+        }
 
-            _isUpdating = true;
+        private void HourUp_Click(object sender, RoutedEventArgs e)
+        {
+            _hours++;
 
-            TextBox textBox = (TextBox)sender;
+            if (_hours > 23)
+                _hours = 0;
 
-            // Keep only digits
-            string digits = new string(textBox.Text.Where(char.IsDigit).ToArray());
+            UpdateTimeDisplay();
+        }
 
-            // Maximum HHMMSS
-            if (digits.Length > 6)
-                digits = digits.Substring(0, 6);
+        private void HourDown_Click(object sender, RoutedEventArgs e)
+        {
+            _hours--;
 
-            // Pad with leading zeros
-            digits = digits.PadLeft(6, '0');
+            if (_hours < 0)
+                _hours = 23;
 
-            // Format as HH:MM:SS
-            string formatted =
-                $"{digits.Substring(0, 2)}:" +
-                $"{digits.Substring(2, 2)}:" +
-                $"{digits.Substring(4, 2)}";
+            UpdateTimeDisplay();
+        }
 
-            textBox.Text = formatted;
+        private void MinuteUp_Click(object sender, RoutedEventArgs e)
+        {
+            _minutes++;
 
-            // Put cursor at the end
-            textBox.CaretIndex = textBox.Text.Length;
+            if (_minutes > 59)
+                _minutes = 0;
 
-            _isUpdating = false;
+            UpdateTimeDisplay();
+        }
+
+        private void MinuteDown_Click(object sender, RoutedEventArgs e)
+        {
+            _minutes--;
+
+            if (_minutes < 0)
+                _minutes = 59;
+
+            UpdateTimeDisplay();
+        }
+
+        private void SecondUp_Click(object sender, RoutedEventArgs e)
+        {
+            _seconds++;
+
+            if (_seconds > 59)
+                _seconds = 0;
+
+            UpdateTimeDisplay();
+        }
+
+        private void SecondDown_Click(object sender, RoutedEventArgs e)
+        {
+            _seconds--;
+
+            if (_seconds < 0)
+                _seconds = 59;
+
+            UpdateTimeDisplay();
         }
 
         private void AddAlarmButton_Click(object sender, RoutedEventArgs e)
         {
-            string alarmTime = TimeTextBox.Text;
+            string alarmTime =
+                $"{_hours:D2}:{_minutes:D2}:{_seconds:D2}";
 
-            if (string.IsNullOrWhiteSpace(alarmTime))
-                return;
+            StackPanel alarmContainer = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 0, 0, 10)
+            };
 
             TextBlock alarm = new TextBlock
             {
                 Text = alarmTime,
                 FontSize = 20,
                 Foreground = Brushes.White,
-                Margin = new Thickness(0, 0, 0, 10)
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
             };
 
-            ActiveAlarmsPanel.Children.Add(alarm);
+            Button removeButton = new Button
+            {
+                Content = "✕",
+                Width = 35,
+                Height = 35,
+                Background = Brushes.Transparent,
+                Foreground = Brushes.Red,
+                BorderBrush = Brushes.Red,
+                BorderThickness = new Thickness(1),
+                Cursor = System.Windows.Input.Cursors.Hand
+            };
 
-            AlarmCountText.Text = ActiveAlarmsPanel.Children.Count.ToString();
+            removeButton.Click += (s, args) =>
+            {
+                ActiveAlarmsPanel.Children.Remove(alarmContainer);
+
+                AlarmCountText.Text =
+                    ActiveAlarmsPanel.Children.Count.ToString();
+            };
+
+            alarmContainer.Children.Add(alarm);
+            alarmContainer.Children.Add(removeButton);
+
+            ActiveAlarmsPanel.Children.Add(alarmContainer);
+
+            AlarmCountText.Text =
+                ActiveAlarmsPanel.Children.Count.ToString();
+
         }
     }
 }
