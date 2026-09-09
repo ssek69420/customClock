@@ -219,6 +219,28 @@
                     Cursor="Hand"
                     Click="AddAlarmButton_Click"/>
 
+                    <Button x:Name="SelectRingtoneButton"
+        Content="🔔  Select Ringtone"
+        Width="200"
+        Height="45"
+        Margin="0,10,0,0"
+        FontSize="15"
+        FontWeight="SemiBold"
+        Foreground="White"
+        Background="#443C1475"
+        BorderBrush="Pink"
+        BorderThickness="1"
+        Cursor="Hand"
+        Click="SelectRingtoneButton_Click"/>
+
+                    <TextBlock x:Name="RingtoneText"
+           Text="No ringtone selected"
+           FontSize="12"
+           Foreground="#CCFFFFFF"
+           HorizontalAlignment="Center"
+           Margin="0,8,0,0"/>
+
+
                 </StackPanel>
 
             </Border>
@@ -305,13 +327,6 @@
                                   HorizontalScrollBarVisibility="Disabled">
 
                         <Grid Grid.Row="2">
-
-                            <TextBlock x:Name="NoAlarmsText"
-               Text="No active alarms"
-               FontSize="16"
-               Foreground="#AAFFFFFF"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
 
                             <!-- Actual alarm list -->
                             <ScrollViewer VerticalScrollBarVisibility="Auto"
