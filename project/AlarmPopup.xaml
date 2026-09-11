@@ -1,0 +1,106 @@
+﻿<Window x:Class="project.AlarmPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Alarm"
+        Width="520"
+        Height="420"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="True"
+        Topmost="True">
+
+    <Border CornerRadius="30"
+            BorderBrush="#FFFF69B4"
+            BorderThickness="1"
+            Background="#15101D"
+            Padding="35">
+
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="35"
+                              ShadowDepth="0"
+                              Opacity="0.7"/>
+        </Border.Effect>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Center">
+
+                <TextBlock Text="⏰"
+                           FontSize="42"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,8"/>
+
+                <TextBlock Text="ALARM"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="#FFFF69B4"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+
+
+            <!-- CENTER -->
+            <StackPanel Grid.Row="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+
+                <TextBlock x:Name="TimeText"
+                           Text="08:30:00"
+                           FontSize="64"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock x:Name="RingtoneText"
+                           Text="Alarm"
+                           FontSize="15"
+                           Foreground="#BFFFFFFF"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,0"
+                           TextTrimming="CharacterEllipsis"
+                           MaxWidth="400"/>
+
+            </StackPanel>
+
+
+            <!-- BUTTON -->
+            <Button Grid.Row="2"
+                    x:Name="DismissButton"
+                    Content="DISMISS"
+                    Width="220"
+                    Height="55"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Background="#663C1475"
+                    BorderBrush="#FFFF69B4"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    Click="DismissButton_Click">
+
+                <Button.Resources>
+
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius"
+                                Value="16"/>
+                    </Style>
+
+                </Button.Resources>
+
+            </Button>
+
+        </Grid>
+
+    </Border>
+
+</Window>

@@ -219,6 +219,20 @@
                     Cursor="Hand"
                     Click="AddAlarmButton_Click"/>
 
+                    <Button x:Name="Addalarm_tensec"
+                    Content="Add Alarm 5 seconds from now"
+                    Width="200"
+                    Height="50"
+                    Margin="0,20,0,0"
+                    FontSize="12.5"
+                    FontWeight="SemiBold"
+                    Foreground="White"
+                    Background="#663C1475"
+                    BorderBrush="Pink"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    Click="Addalarm_tensec_click"/>
+
                     <Button x:Name="SelectRingtoneButton"
         Content="🔔  Select Ringtone"
         Width="200"

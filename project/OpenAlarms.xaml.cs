@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32;
 using System.Windows.Threading;
 
 namespace project
@@ -27,10 +25,12 @@ namespace project
         {
             DateTime _cTime = DateTime.Now;
             string currentTime = _cTime.ToString("HH:mm:ss");
-            foreach(Alarm alarm in _alarms){
-                if(!alarm.IsEnabled)
+            foreach (Alarm alarm in _alarms)
+            {
+                if (!alarm.IsEnabled)
                     continue;
-                if(alarm.timestring == currentTime){
+                if (alarm.timestring == currentTime)
+                {
                     TriggerAlarm(alarm);
                 }
             }
@@ -39,29 +39,24 @@ namespace project
         private void TriggerAlarm(Alarm alarm)
         {
             alarm.IsEnabled = false;
-            if (!string.IsNullOrEmpty(alarm.RingtonePath))
+
+            AlarmPopup popup = new AlarmPopup(alarm);
+
+            popup.ShowDialog();
+
+            RefreshAlarmCards();
+        }
+
+        private void RefreshAlarmCards()
+        {
+            ActiveAlarmsPanel.Children.Clear();
+
+            foreach (Alarm alarm in _alarms)
             {
-                _mediaplayer = new MediaPlayer();
-                try
-                {
-                    _mediaplayer.Open(new Uri(alarm.RingtonePath));
-                    _mediaplayer.Play();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show(
-                        "Ringtone could not be played.",
-                        "Alarm",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning
-                    );
-                }
+                CreateAlarmCard(alarm);
             }
-            MessageBox.Show(
-                alarm.timestring,
-                "Alarm",
-                MessageBoxButton.OK
-            );
+
+            AlarmCountText.Text = _alarms.Count.ToString();
         }
         public OpenAlarms()
         {
@@ -86,9 +81,7 @@ namespace project
 
         private readonly DispatcherTimer _alarmTimer;
 
-        private MediaPlayer _mediaplayer;
-
-        private string _selectedRingtonePath;
+        private string? _selectedRingtonePath;
 
         private void SelectRingtoneButton_Click(object sender, RoutedEventArgs e)
         {
@@ -173,61 +166,176 @@ namespace project
             UpdateTimeDisplay();
         }
 
-        private void AddAlarmButton_Click(object sender, RoutedEventArgs e)
+        private void CreateAlarmCard(Alarm alarm)
         {
-            Alarm newAlarm = new Alarm
+            Border card = new Border
             {
-                Hours = _hours,
-                Minutes = _minutes,
-                Seconds = _seconds,
-                RingtonePath = _selectedRingtonePath
+                CornerRadius = new CornerRadius(18),
+                Background = new SolidColorBrush(
+                    Color.FromArgb(45, 255, 255, 255)
+                ),
+                BorderBrush = new SolidColorBrush(
+                    Color.FromArgb(80, 255, 105, 180)
+                ),
+                BorderThickness = new Thickness(1),
+                Padding = new Thickness(16),
+                Margin = new Thickness(0, 0, 0, 12)
             };
 
-            _alarms.Add(newAlarm);
+            Grid cardGrid = new Grid();
 
-            StackPanel alarmContainer = new StackPanel
+            cardGrid.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+            );
+
+            cardGrid.ColumnDefinitions.Add(
+                new ColumnDefinition { Width = GridLength.Auto }
+            );
+
+            // =========================
+            // LEFT SIDE
+            // =========================
+
+            StackPanel information = new StackPanel();
+
+            TextBlock timeText = new TextBlock
+            {
+                Text = alarm.timestring,
+                FontSize = 30,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White
+            };
+
+            string ringtoneName = "No ringtone";
+
+            if (!string.IsNullOrEmpty(alarm.RingtonePath))
+            {
+                ringtoneName =
+                    System.IO.Path.GetFileName(alarm.RingtonePath);
+            }
+
+            TextBlock ringtoneText = new TextBlock
+            {
+                Text = "🔔  " + ringtoneName,
+                FontSize = 12,
+                Foreground = new SolidColorBrush(
+                    Color.FromArgb(190, 255, 255, 255)
+                ),
+                Margin = new Thickness(0, 4, 0, 0),
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxWidth = 230
+            };
+
+            information.Children.Add(timeText);
+            information.Children.Add(ringtoneText);
+
+            Grid.SetColumn(information, 0);
+
+            // =========================
+            // RIGHT SIDE BUTTONS
+            // =========================
+
+            StackPanel buttons = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                Margin = new Thickness(0, 0, 0, 10)
+                VerticalAlignment = VerticalAlignment.Center
             };
 
-            TextBlock alarm = new TextBlock
+            Button toggleButton = new Button
             {
-                Text = newAlarm.ToString(),
-                FontSize = 20,
+                Content = alarm.IsEnabled ? "ON" : "OFF",
+                Width = 55,
+                Height = 35,
+                Margin = new Thickness(5, 0, 5, 0),
+                FontWeight = FontWeights.Bold,
                 Foreground = Brushes.White,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 150
+                Background = alarm.IsEnabled
+                    ? new SolidColorBrush(
+                        Color.FromArgb(130, 50, 180, 100))
+                    : new SolidColorBrush(
+                        Color.FromArgb(100, 100, 100, 100)),
+                BorderBrush = Brushes.Transparent,
+                Cursor = Cursors.Hand
             };
+
+            toggleButton.Click += (s, e) =>
+            {
+                alarm.IsEnabled = !alarm.IsEnabled;
+
+                RefreshAlarmCards();
+            };
+
 
             Button removeButton = new Button
             {
                 Content = "✕",
                 Width = 35,
                 Height = 35,
-                Background = Brushes.Transparent,
-                Foreground = Brushes.Red,
-                BorderBrush = Brushes.Red,
+                Margin = new Thickness(5, 0, 0, 0),
+                FontSize = 14,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                Background = new SolidColorBrush(
+                    Color.FromArgb(100, 180, 40, 80)
+                ),
+                BorderBrush = new SolidColorBrush(
+                    Color.FromArgb(150, 255, 100, 140)
+                ),
                 BorderThickness = new Thickness(1),
-                Cursor = System.Windows.Input.Cursors.Hand
+                Cursor = Cursors.Hand
             };
 
-            removeButton.Click += (s, args) =>
+            removeButton.Click += (s, e) =>
             {
-                ActiveAlarmsPanel.Children.Remove(alarmContainer);
+                _alarms.Remove(alarm);
 
-                AlarmCountText.Text =
-                    ActiveAlarmsPanel.Children.Count.ToString();
+                RefreshAlarmCards();
             };
 
-            alarmContainer.Children.Add(alarm);
-            alarmContainer.Children.Add(removeButton);
 
-            ActiveAlarmsPanel.Children.Add(alarmContainer);
+            buttons.Children.Add(toggleButton);
+            buttons.Children.Add(removeButton);
 
-            AlarmCountText.Text =
-                ActiveAlarmsPanel.Children.Count.ToString();
+            Grid.SetColumn(buttons, 1);
 
+            cardGrid.Children.Add(information);
+            cardGrid.Children.Add(buttons);
+
+            card.Child = cardGrid;
+
+            ActiveAlarmsPanel.Children.Add(card);
+        }
+
+        private void AddAlarmButton_Click(object sender, RoutedEventArgs e)
+        {
+            Alarm newAlarm = new Alarm
+            {
+                Hours = DateTime.Now.Hour,
+                Minutes = DateTime.Now.Minute,
+                Seconds = DateTime.Now.Second,
+                RingtonePath = _selectedRingtonePath ?? ""
+            };
+
+            _alarms.Add(newAlarm);
+
+            RefreshAlarmCards();
+        }
+
+        //previously named "tensec", but, in reality, it adds 5 seconds.
+        //Reason is that 10 had too much waiting time. By going with 5, it seems more manageable.
+        private void Addalarm_tensec_click(object sender, RoutedEventArgs e)
+        {
+            DateTime go_off = DateTime.Now.AddSeconds(5);
+            Alarm newAlarm = new Alarm
+            {
+                Hours = DateTime.Now.Hour,
+                Minutes = DateTime.Now.Minute,
+                Seconds = go_off.Second,
+                RingtonePath = _selectedRingtonePath ?? ""
+            };
+
+            _alarms.Add(newAlarm);
+            RefreshAlarmCards();
         }
     }
 }
